@@ -65,42 +65,120 @@ const enemyShips = []//instances of enemy ships
 for (let i = 1; i<7; i++){
     enemyShips.push(new enemyShip(`enemyShip${i}`));
 }
-console.log(enemyShips);
+// console.log(enemyShips);
 
-
+const accCheck= function(shipObject){
+    const roll = Math.random()
+    console.log(`rolling ${roll} vs accuracy ${shipObject.accuracy} for ${shipObject.shipName}`);
+    if (roll<shipObject.accuracy){
+        console.log(`accuracy check passed for ${shipObject.shipName}`);
+        return true
+    }
+    else{
+        console.log(`accuracy check failed for ${shipObject.shipName}`);
+        return false
+    }
+}
 
 // while (gameIsOn){
     //     humanShip.attack(enemyShips[0])
     //     console.log(enemyShips);
     
     // }
-    const uName = prompt('What is the name of your vessel?')
-    const humanShip = new  userShip(uName);
-    while (gameIsOn){
-        if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
-            const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
-            if (answer.toLowerCase() == 'a'){
-                if (humanShip.attack(enemyShips[0])){
-                enemyShips.shift()
-            }
-            else{//if user's attack didn't kill enemy ship
-                if(enemyShips[0].attack(humanShip)){//returns true is humanship dies
-                    gameIsOn = false
-                    console.log(`${humanShip.shipName} has fallen.`);
-                    break
-                }
+const uName = prompt('What is the name of your vessel?')
+const humanShip = new  userShip(uName);
+// while (gameIsOn){
+//         if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
+//             const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
+//             if (answer.toLowerCase() == 'a'){
+//                 //accuracy check
+//                 const roll = Math.random()
+//                 console.log(roll);
+//                 if (roll<humanShip.accuracy){
+//                     if (humanShip.attack(enemyShips[0])){
+//                         enemyShips.shift()
+//                     }
+//                 }
+//                 else{
+//                         const roll2 = Math.random()
+//                         console.log(`${humanShip.shipName} has missed its target!`);
+//                         if (roll2<enemyShip[0].accuracy){
+//                             enemyShip[0].attack(humanShip)
+//                         }
+//                         else{
+//                             console.log(`${enemyShip[0].shipName} has missed its target!`);
+//                         }
+//                 }}
+//             else{//if user's attack didn't kill enemy ship
+//                 //accuracy check for enemy
+//                 if(enemyShips[0].attack(humanShip)){//returns true is humanship dies
+//                     gameIsOn = false
+//                     console.log(`${humanShip.shipName} has fallen.`);
+//                     break
+//                 }
                 
+//             }
+//             console.log(enemyShips);
+//             // if (enemyShips[0].hull <= 0)
+//     }       else{
+//         humanShip.retreat(enemyShips)
+//     }
+//     }
+    //     else{
+    //         console.log(`There are no more enemy ships! You win!`);
+    //         gameIsOn = false
+    // }
+while (gameIsOn){
+    if (enemyShips.length>0){
+        console.log('there are still ships');
+        const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
+        if (answer.toLowerCase() == 'a'){
+            console.log('you decide to attack');
+            // roll = Math.random()
+            if (accCheck(humanShip)){//if acc passed, then attack
+                if (humanShip.attack(enemyShips[0])){
+                    console.log(`${enemyShips[0].shipName} has fallen.`);
+                    enemyShips.shift()
+                    console.log(`${enemyShips.length} remain`);
+                }
+                else{//if enemy ship not dead
+                    if (accCheck(enemyShips[0])){
+                        if(enemyShips[0].attack(humanShip)){
+                            gameIsOn=false;
+                            console.log(`${humanShip.shipName} has fallen.`);
+                            break
+                        }
+    
+                    }
+                }
+
+
             }
-            console.log(enemyShips);
-            // if (enemyShips[0].hull <= 0)
-    }else{
-        humanShip.retreat(enemyShips)
-    }
+            else{//if whiffed, enemy attacks
+                if (accCheck(enemyShips[0])){
+                    if(enemyShips[0].attack(humanShip)){
+                        gameIsOn=false;
+                        console.log(`${humanShip.shipName} has fallen.`);
+                        break
+                    }
+
+                }
+                // else //enemy misses acc check
+            }
+
+
+
+
+
+        }
+        else{
+            console.log('you decide to retreat');
+            humanShip.retreat(enemyShips)
+        }
     }
     else{
-        console.log(`There are no more enemy ships! You win!`);
-        gameIsOn = false
+        console.log('There are no more ships. You win!');
+        gameIsOn=false
     }
 }
-
 prompt('GAME OVER');
