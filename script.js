@@ -46,7 +46,7 @@ class userShip extends Ship{
 class enemyShip extends Ship{
     constructor(shipName) {
         super(shipName);
-        this.hull = Math.floor(Math.random() * 4) + 3;
+        this.hull = Math.floor(Math.random() * 4) + 9;//should be 3
         this.firepower = Math.floor(Math.random() * 3) + 2;
         this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
       }//create own attack method to supersede parent
@@ -85,6 +85,7 @@ while (gameIsOn){
             else{//if user's attack didn't kill enemy ship
                 if(enemyShips[0].attack(humanShip)){//returns true is humanship dies
                     gameIsOn = false
+                    console.log(`${humanShip.shipName} has fallen.`);
                     break
                 }
                 
