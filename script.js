@@ -46,7 +46,7 @@ class userShip extends Ship{
 class enemyShip extends Ship{
     constructor(shipName) {
         super(shipName);
-        this.hull = Math.floor(Math.random() * 4) + 9;//should be 3
+        this.hull = Math.floor(Math.random() * 4) + 3;//should be 3
         this.firepower = Math.floor(Math.random() * 3) + 2;
         this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
       }//create own attack method to supersede parent
@@ -55,11 +55,10 @@ class enemyShip extends Ship{
 
 
 
-const humanShip = new  userShip('USS General');
 let gameIsOn = true
 
 // event listener
-attackBtn.addEventListener('click', humanShip.attack);
+// attackBtn.addEventListener('click', humanShip.attack);
 
 
 const enemyShips = []//instances of enemy ships
@@ -71,15 +70,17 @@ console.log(enemyShips);
 
 
 // while (gameIsOn){
-//     humanShip.attack(enemyShips[0])
-//     console.log(enemyShips);
-
-// }
-while (gameIsOn){
-    if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
-        const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
-        if (answer.toLowerCase() == 'a'){
-            if (humanShip.attack(enemyShips[0])){
+    //     humanShip.attack(enemyShips[0])
+    //     console.log(enemyShips);
+    
+    // }
+    const uName = prompt('What is the name of your vessel?')
+    const humanShip = new  userShip(uName);
+    while (gameIsOn){
+        if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
+            const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
+            if (answer.toLowerCase() == 'a'){
+                if (humanShip.attack(enemyShips[0])){
                 enemyShips.shift()
             }
             else{//if user's attack didn't kill enemy ship
