@@ -18,7 +18,7 @@ class Ship {
         ship.hull -= this.firepower
         console.log(`${ship.shipName}'s hull is now ${ship.hull}`);
         if (ship.hull <= 0){
-            console.log(`You have slain ${ship.shipName}!`);
+            console.log(`${this.shipName} has slain ${ship.shipName}!`);
             return true //returns true if ship is killed, will then use value to either end game if user's ship was destroyed, or to take slain enemy ship out of array
         }
         else{
@@ -38,7 +38,7 @@ class userShip extends Ship{
       }
 
     retreat(enemyShips){
-        console.log(`You have successfully retreated from battle. There were ${enemyShips.length} left.`);
+        console.log(`You have successfully retreated from battle. There were ${enemyShips.length} enemy ships left.`);
         gameIsOn = false
     }
 }
@@ -49,14 +49,14 @@ class enemyShip extends Ship{
         this.hull = Math.floor(Math.random() * 4) + 3;
         this.firepower = Math.floor(Math.random() * 3) + 2;
         this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
-      }
+      }//create own attack method to supersede parent
 }
 
 
 
 
 const humanShip = new  userShip('USS General');
-const gameIsOn = true
+let gameIsOn = true
 
 // event listener
 attackBtn.addEventListener('click', humanShip.attack);
@@ -75,15 +75,30 @@ console.log(enemyShips);
 //     console.log(enemyShips);
 
 // }
-
-if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
-    console.log(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat?`);
-    if (humanShip.attack(enemyShips[0])){
-        enemyShips.shift()
+while (gameIsOn){
+    if (enemyShips.length > 0){//checks if anymore enemy ships left, keep repeating in game loop
+        const answer = prompt(`There are ${enemyShips.length} enemy ships remaining. Would you like to attack the next ship or retreat? Type "a" to attack or "r" to retreat`);
+        if (answer.toLowerCase() == 'a'){
+            if (humanShip.attack(enemyShips[0])){
+                enemyShips.shift()
+            }
+            else{//if user's attack didn't kill enemy ship
+                if(enemyShips[0].attack(humanShip)){//returns true is humanship dies
+                    gameIsOn = false
+                    break
+                }
+                
+            }
+            console.log(enemyShips);
+            // if (enemyShips[0].hull <= 0)
+    }else{
+        humanShip.retreat(enemyShips)
     }
-    console.log(enemyShips);
-    // if (enemyShips[0].hull <= 0)
+    }
+    else{
+        console.log(`There are no more enemy ships! You win!`);
+        gameIsOn = false
+    }
 }
-else{
-    console.log(`There are no more enemy ships! You win!`);
-}
+
+prompt('GAME OVER');
